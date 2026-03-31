@@ -152,5 +152,10 @@
     "clsx": "^2.1.1",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.2.2"
+  },
+  "commit-and-tag-version": {
+    "scripts": {
+      "postchangelog": "pnpm run format"
+    }
   }
 }
