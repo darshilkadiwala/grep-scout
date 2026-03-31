@@ -2,15 +2,47 @@
   "name": "filescout",
   "displayName": "FileScout: Advanced File Search",
   "description": "Lightning-fast file name search with granular directory filtering",
-  "version": "0.0.1",
-  "publisher": "antigravity",
+  "version": "0.0.0",
+  "publisher": "darshil-dev",
   "engines": {
     "vscode": "^1.85.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/darshilkadiwala/filescout.git"
+  },
+  "homepage": "https://github.com/darshilkadiwala/filescout#readme",
+  "bugs": {
+    "url": "https://github.com/darshilkadiwala/filescout/issues"
+  },
+  "license": "MIT",
+  "icon": "media/logo.png",
+  "galleryBanner": {
+    "color": "#007ACC",
+    "theme": "dark"
+  },
+  "keywords": [
+    "search",
+    "file search",
+    "advanced search",
+    "explorer",
+    "listing",
+    "list files",
+    "find files",
+    "developer tools"
+  ],
   "categories": [
+    "Visualization",
     "Other"
   ],
-  "activationEvents": [],
+  "qna": "market",
+  "extensionKind": [
+    "workspace",
+    "ui"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
     "viewsContainers": {
@@ -83,7 +115,7 @@
     "watch": "run-p watch:*",
     "watch:extension": "node esbuild.js --watch",
     "watch:webview": "cd src/webview && vite build --watch",
-    "package": "vsce package",
+    "package": "vsce package --no-dependencies",
     "release": "commit-and-tag-version",
     "lint": "tsc --noEmit && eslint src --cache --fix --max-warnings=0",
     "format": "prettier --write . --cache --ignore-unknown --list-different",

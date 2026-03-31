@@ -7,6 +7,7 @@
 !package.json
 !README.md
 !CHANGELOG.md
+!LICENSE.txt
 
 # Ensure parent directories are not ignored
 !dist/
