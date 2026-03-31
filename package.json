@@ -2,7 +2,7 @@
   "name": "filescout",
   "displayName": "FileScout: Advanced File Search",
   "description": "Lightning-fast file name search with granular directory filtering",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "darshil-dev",
   "engines": {
     "vscode": "^1.85.0"
