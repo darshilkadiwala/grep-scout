@@ -1,0 +1,17 @@
+@import 'tailwindcss';
+@import '@vscode/codicons/dist/codicon.css';
+
+/* CSS has been fully refactored to Tailwind utility classes in App.tsx */
+
+@theme {
+  @keyframes progress-slide {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  --animate-progress-slide: progress-slide 1.5s infinite linear;
+}
