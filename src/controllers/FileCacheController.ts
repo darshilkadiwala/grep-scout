@@ -28,13 +28,13 @@ export class FileCacheController {
 
     this.watcher.onDidCreate((uri) => {
       // Add if not already there (shouldn't be, but safe)
-      if (!this.files.find((f) => f.fsPath === uri.fsPath)) {
+      if (!this.files.find((f) => f.toString() === uri.toString())) {
         this.files.push(uri);
       }
     });
 
     this.watcher.onDidDelete((uri) => {
-      this.files = this.files.filter((f) => f.fsPath !== uri.fsPath);
+      this.files = this.files.filter((f) => f.toString() !== uri.toString());
     });
 
     // onDidChange usually refers to content, not name/existence, so we mostly care about Create/Delete.

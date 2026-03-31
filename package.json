@@ -7,6 +7,9 @@
   "engines": {
     "vscode": "^1.85.0"
   },
+  "author": {
+    "name": "Darshil Kadiwala"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/darshilkadiwala/filescout.git"
@@ -15,7 +18,7 @@
   "bugs": {
     "url": "https://github.com/darshilkadiwala/filescout/issues"
   },
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE.txt",
   "icon": "media/logo.png",
   "galleryBanner": {
     "color": "#007ACC",
@@ -35,15 +38,22 @@
     "Visualization",
     "Other"
   ],
-  "qna": "market",
+  "qna": "https://github.com/darshilkadiwala/filescout/issues",
   "extensionKind": [
     "workspace",
     "ui"
   ],
+  "capabilities": {
+    "virtualWorkspaces": true,
+    "untrustedWorkspaces": {
+      "supported": true
+    }
+  },
   "activationEvents": [
     "onStartupFinished"
   ],
   "main": "./dist/extension.js",
+  "browser": "./dist/extension.browser.js",
   "contributes": {
     "viewsContainers": {
       "activitybar": [

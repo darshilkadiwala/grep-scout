@@ -1,6 +1,3 @@
-import * as fs from 'fs';
-import * as path from 'path';
-
 import * as vscode from 'vscode';
 
 // ── Shared type (also imported by the webview via types/index.ts) ────────────
@@ -38,8 +35,8 @@ export class FileIconProvider {
   private static _cached: {
     themeId: string;
     doc: ThemeDoc;
-    /** Absolute directory containing the theme JSON file */
-    themeDir: string;
+    /** Absolute directory URI containing the theme JSON file */
+    themeDirUri: vscode.Uri;
     /** Root of the extension that provides the theme (for localResourceRoots) */
     extensionRoot: vscode.Uri;
   } | null = null;
@@ -47,39 +44,45 @@ export class FileIconProvider {
   // ── Public helpers ─────────────────────────────────────────────────────────
 
   /**
-   * The parent directory shared by all user-installed extensions, e.g.
-   * `~/.vscode/extensions`.  Pass this to `localResourceRoots` so the
-   * webview can load SVG/PNG icons from any icon-theme extension.
+   * The parent directory shared by all user-installed extensions.
+   * Pass this to `localResourceRoots` so the webview can load icons.
    */
   static get userExtensionsRoot(): vscode.Uri | undefined {
     const ext = vscode.extensions.all.find((e) => !e.packageJSON?.isBuiltin);
-    return ext ? vscode.Uri.file(path.dirname(ext.extensionPath)) : undefined;
+    if (!ext) return undefined;
+    // Get the parent directory of the extension
+    const parts = ext.extensionUri.path.split('/');
+    if (parts.length <= 1) return undefined;
+    return ext.extensionUri.with({ path: parts.slice(0, -1).join('/') });
   }
 
   /**
    * The built-in extensions directory that ships with VS Code.
-   * Needed for the default Seti / minimal icon themes.
    */
   static get builtinExtensionsRoot(): vscode.Uri {
-    return vscode.Uri.file(path.join(vscode.env.appRoot, 'extensions'));
+    return vscode.Uri.joinPath(vscode.Uri.parse(vscode.env.appRoot), 'extensions');
   }
 
   /**
    * Resolve icons for a set of filenames and folder names, returning a compact map.
    */
-  static buildIconMap(webview: vscode.Webview, fileNames: string[], folderNames: string[] = []): IconMap | null {
-    const loaded = this._loadTheme();
+  static async buildIconMap(
+    webview: vscode.Webview,
+    fileNames: string[],
+    folderNames: string[] = [],
+  ): Promise<IconMap | null> {
+    const loaded = await this._loadTheme();
     if (!loaded) return null;
 
-    const { doc, themeDir } = loaded;
+    const { doc, themeDirUri } = loaded;
 
     /** Convert a theme-relative icon path → webview URI string (or ''). */
     const resolve = (iconKey: string | undefined): string => {
       if (!iconKey) return '';
       const def = doc.iconDefinitions[iconKey];
       if (!def?.iconPath) return '';
-      const abs = path.join(themeDir, def.iconPath);
-      return webview.asWebviewUri(vscode.Uri.file(abs)).toString();
+      const iconUri = vscode.Uri.joinPath(themeDirUri, def.iconPath);
+      return webview.asWebviewUri(iconUri).toString();
     };
 
     const map: IconMap = {
@@ -146,7 +149,7 @@ export class FileIconProvider {
 
   // ── Private ────────────────────────────────────────────────────────────────
 
-  private static _loadTheme() {
+  private static async _loadTheme() {
     const themeId = vscode.workspace.getConfiguration('workbench').get<string>('iconTheme');
 
     if (!themeId) return null;
@@ -162,19 +165,23 @@ export class FileIconProvider {
       for (const theme of themes) {
         if (theme.id !== themeId) continue;
 
-        const themePath = path.join(ext.extensionPath, theme.path);
+        const themeUri = vscode.Uri.joinPath(ext.extensionUri, theme.path);
         try {
-          const raw = fs.readFileSync(themePath, 'utf-8');
-          const doc = JSON.parse(raw) as ThemeDoc;
+          const raw = await vscode.workspace.fs.readFile(themeUri);
+          const doc = JSON.parse(new TextDecoder().decode(raw)) as ThemeDoc;
+          // Get theme dir URI (parent of themeUri)
+          const parts = themeUri.path.split('/');
+          const themeDirUri = themeUri.with({ path: parts.slice(0, -1).join('/') });
+
           this._cached = {
             themeId,
             doc,
-            themeDir: path.dirname(themePath),
-            extensionRoot: vscode.Uri.file(ext.extensionPath),
+            themeDirUri,
+            extensionRoot: ext.extensionUri,
           };
           return this._cached;
         } catch {
-          /* malformed theme JSON – skip */
+          /* malformed theme JSON or file not found – skip */
         }
       }
     }

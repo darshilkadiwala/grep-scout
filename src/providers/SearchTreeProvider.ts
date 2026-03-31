@@ -155,7 +155,7 @@ export class SearchTreeProvider implements vscode.TreeDataProvider<SearchResultI
 
     // Sentinel root – its own uri is never exposed to VS Code.
     const root: TrieNode = {
-      uri: vscode.Uri.file('/'),
+      uri: vscode.Uri.parse('filescout-root:/'),
       isFile: false,
       children: new Map(),
     };
@@ -182,7 +182,6 @@ export class SearchTreeProvider implements vscode.TreeDataProvider<SearchResultI
    */
   private _insertIntoTrie(root: TrieNode, fileUri: vscode.Uri): void {
     // Get the workspace-relative path (e.g. "src/providers/foo.ts").
-    // Fall back to the raw fsPath if there is no workspace.
     const relativePath = vscode.workspace.asRelativePath(fileUri, false);
 
     // Normalise separators to forward-slash and split into segments.
@@ -216,24 +215,15 @@ export class SearchTreeProvider implements vscode.TreeDataProvider<SearchResultI
 
   /**
    * Build a vscode.Uri for a folder given the path segments relative to the
-   * workspace root.  We derive the absolute path by stripping the relative
-   * portion from a known file URI.
-   *
-   * Strategy: take the file's fsPath, strip its relative segments, then
-   * append the desired folder segments.
+   * workspace root.
    */
   private _buildFolderUri(fileUri: vscode.Uri, folderSegments: string[]): vscode.Uri {
     const workspaceFolder = vscode.workspace.getWorkspaceFolder(fileUri);
     if (workspaceFolder) {
-      // Preferred: build from the workspace root so the uri is always correct.
       return vscode.Uri.joinPath(workspaceFolder.uri, ...folderSegments);
     }
-
-    // Fallback: strip trailing file segments from the fsPath.
-    const fsPath = fileUri.fsPath.replace(/\\/g, '/');
-    const relativePath = vscode.workspace.asRelativePath(fileUri, false).replace(/\\/g, '/');
-    const workspaceRoot = fsPath.slice(0, fsPath.length - relativePath.length);
-    return vscode.Uri.file(workspaceRoot + folderSegments.join('/'));
+    // Fallback if no workspace (should be rare in VS Code)
+    return fileUri.with({ path: fileUri.path.split('/').slice(0, -1).join('/') });
   }
 
   // ── Trie path compression ──────────────────────────────────────────────────
@@ -281,16 +271,15 @@ export class SearchTreeProvider implements vscode.TreeDataProvider<SearchResultI
 
   /**
    * Find the trie node whose uri matches `targetUri`.
-   * We do a BFS/DFS walking all nodes since the trie can have compressed keys.
    */
   private _findTrieNode(root: TrieNode, targetUri: vscode.Uri): TrieNode | null {
-    const targetFsPath = targetUri.fsPath;
+    const targetUriString = targetUri.toString();
 
     // Iterative DFS using a stack.
     const stack: TrieNode[] = [root];
     while (stack.length > 0) {
       const node = stack.pop()!;
-      if (node !== root && node.uri.fsPath === targetFsPath) {
+      if (node !== root && node.uri.toString() === targetUriString) {
         return node;
       }
       for (const child of node.children.values()) {

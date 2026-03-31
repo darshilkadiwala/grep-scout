@@ -24,7 +24,8 @@ const esbuildProblemMatcherPlugin = {
 };
 
 async function build() {
-  const ctx = await esbuild.context({
+  // Node.js extension build
+  const nodeCtx = await esbuild.context({
     entryPoints: ['src/extension.ts'],
     bundle: true,
     format: 'cjs',
@@ -36,18 +37,31 @@ async function build() {
     external: ['vscode'],
     target: 'node18',
     logLevel: isProduction ? 'silent' : 'info',
-    plugins: [
-      /* add to the end of plugins array */
-      esbuildProblemMatcherPlugin,
-    ],
+    plugins: [esbuildProblemMatcherPlugin],
+  });
+
+  // Browser extension build
+  const browserCtx = await esbuild.context({
+    entryPoints: ['src/extension.ts'],
+    bundle: true,
+    format: 'cjs',
+    minify: isProduction,
+    sourcemap: !isProduction,
+    sourcesContent: false,
+    platform: 'browser',
+    outfile: 'dist/extension.browser.js',
+    external: ['vscode'],
+    target: 'es2020',
+    logLevel: isProduction ? 'silent' : 'info',
+    plugins: [esbuildProblemMatcherPlugin],
   });
 
   if (isWatch) {
-    await ctx.watch();
+    await Promise.all([nodeCtx.watch(), browserCtx.watch()]);
     console.log('Watching for changes...');
   } else {
-    await ctx.rebuild();
-    await ctx.dispose();
+    await Promise.all([nodeCtx.rebuild(), browserCtx.rebuild()]);
+    await Promise.all([nodeCtx.dispose(), browserCtx.dispose()]);
     console.log('Build complete');
   }
 }

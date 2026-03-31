@@ -52,7 +52,7 @@ export class SearchSidebarProvider implements vscode.WebviewViewProvider {
             dirs.forEach((d) => folderNames.add(d));
           });
 
-          const iconMap = FileIconProvider.buildIconMap(
+          const iconMap = await FileIconProvider.buildIconMap(
             webviewView.webview,
             results.map((r) => r.fileName),
             Array.from(folderNames),

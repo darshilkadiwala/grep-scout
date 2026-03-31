@@ -1,5 +1,3 @@
-import * as path from 'path';
-
 import * as vscode from 'vscode';
 
 import { SearchQuery, SearchResult } from '../types';
@@ -18,6 +16,10 @@ function isGlobMatch(relPath: string, glob: string): boolean {
     .replace(/\?/g, '.');
   const re = new RegExp(`^${escaped}$`, 'i');
   return re.test(relPath);
+}
+
+function getBasename(path: string): string {
+  return path.split(/[\\/]/).pop() || '';
 }
 
 // ─── Shared matcher ───────────────────────────────────────────────────────────
@@ -70,10 +72,12 @@ export class SearchController {
     await FileCacheController.init();
     const allCacheFiles = FileCacheController.getAllFiles();
 
-    const openUris = searchOpenEditors ? new Set(vscode.workspace.textDocuments.map((doc) => doc.uri.fsPath)) : null;
+    const openUris = searchOpenEditors
+      ? new Set(vscode.workspace.textDocuments.map((doc) => doc.uri.toString()))
+      : null;
 
     const filteredPool = allCacheFiles.filter((file) => {
-      if (openUris && !openUris.has(file.fsPath)) return false;
+      if (openUris && !openUris.has(file.toString())) return false;
       return true;
     });
 
@@ -106,9 +110,9 @@ export class SearchController {
       });
 
       return matchedFiles.slice(0, maxResults).map((f) => ({
-        fileName: path.basename(f.fsPath),
+        fileName: getBasename(f.path),
         relativePath: vscode.workspace.asRelativePath(f),
-        fullPath: f.fsPath,
+        fullPath: f.toString(),
       }));
     }
 
@@ -117,7 +121,7 @@ export class SearchController {
       ? filteredPool.filter((f) => isGlobMatch(vscode.workspace.asRelativePath(f, false).replace(/\\/g, '/'), include))
       : filteredPool;
 
-    const queryMatches = finalFiles.filter((file) => matchesSegment(path.basename(file.fsPath), rawQuery, matchOpts));
+    const queryMatches = finalFiles.filter((file) => matchesSegment(getBasename(file.path), rawQuery, matchOpts));
 
     // Sort by relative path for explorer-like grouping and consistency
     queryMatches.sort((a, b) => {
@@ -127,14 +131,14 @@ export class SearchController {
     });
 
     return queryMatches.slice(0, maxResults).map((file) => ({
-      fileName: path.basename(file.fsPath),
+      fileName: getBasename(file.path),
       relativePath: vscode.workspace.asRelativePath(file),
-      fullPath: file.fsPath,
+      fullPath: file.toString(),
     }));
   }
 
   public static async openFile(fullPath: string) {
-    const uri = vscode.Uri.file(fullPath);
+    const uri = vscode.Uri.parse(fullPath);
     const document = await vscode.workspace.openTextDocument(uri);
     await vscode.window.showTextDocument(document, { preserveFocus: true });
   }
