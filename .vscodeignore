@@ -1,0 +1,13 @@
+# Ignore everything by default
+**/*
+
+# Include only the compiled outputs and artifacts
+!dist/**
+!media/search-icon.svg
+!package.json
+!README.md
+!CHANGELOG.md
+
+# Ensure parent directories are not ignored
+!dist/
+!media/
