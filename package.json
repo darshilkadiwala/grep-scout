@@ -116,6 +116,7 @@
     "watch:extension": "node esbuild.js --watch",
     "watch:webview": "cd src/webview && vite build --watch",
     "package": "vsce package --no-dependencies",
+    "publish": "vsce publish --no-dependencies",
     "release": "commit-and-tag-version",
     "lint": "tsc --noEmit && eslint src --cache --fix --max-warnings=0",
     "format": "prettier --write . --cache --ignore-unknown --list-different",
