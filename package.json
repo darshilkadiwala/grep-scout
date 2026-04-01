@@ -130,7 +130,8 @@
     "release": "commit-and-tag-version",
     "lint": "tsc --noEmit && eslint src --cache --fix --max-warnings=0",
     "format": "prettier --write . --cache --ignore-unknown --list-different",
-    "postinstall": "pnpm run format"
+    "postinstall": "pnpm run format",
+    "diff": "git diff --staged > temp.txt"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",

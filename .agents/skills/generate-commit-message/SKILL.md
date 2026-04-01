@@ -18,15 +18,15 @@ A comprehensive overview of the common commit message conventions across differe
 
 ### **Strict Constraints**
 
-- **Source of Truth:** All analysis MUST be performed on the content of `.tmp/diff.txt`.
+- **Source of Truth:** All analysis MUST be performed on the content of `temp.txt`.
 - Only generate the commit message based on staged changes (files in the index) (git diff --cached)
 - Do not include details from unstaged/working directory changes or the entire file history unless they are explicitly marked as staged in the provided diff
 
 ### **Execution & Environment Control**
 
-- **Pre-Analysis Step:** Before analyzing the changes, run `git diff --cached > .tmp/diff.txt`.
-- **Scope:** ONLY use the content within `.tmp/diff.txt` to generate the message. Do not perform a general `git diff` or look at unstaged files.
-- **Cleanup:** - Delete `.tmp/diff.txt` immediately after the commit message is generated.
+- **Pre-Analysis Step:** Before analyzing the changes, run `git diff --cached > temp.txt`.
+- **Scope:** ONLY use the content within `temp.txt` to generate the message. Do not perform a general `git diff` or look at unstaged files.
+- **Cleanup:** - Delete `temp.txt` immediately after the commit message is generated.
   - Remove any other temporary buffers or logs created during the analysis.
   - Do not leave `COMMIT_EDITMSG` artifacts in the project root.
 
@@ -63,8 +63,8 @@ A comprehensive overview of the common commit message conventions across differe
 
 ### **Workflow:**
 
-1. Dump staged changes: `git diff --cached > .tmp/diff.txt`
-2. Read and analyze `.tmp/diff.txt`
+1. Dump staged changes: `git diff --cached > temp.txt`
+2. Read and analyze `temp.txt`
 3. Generate message following the "Commit Message Format"
 4. Cleanup the temporary file
 

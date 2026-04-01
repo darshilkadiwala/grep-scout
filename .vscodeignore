@@ -4,6 +4,7 @@
 # Include only the compiled outputs and artifacts
 !dist/**
 !media/search-icon.svg
+!media/logo.png
 !package.json
 !README.md
 !CHANGELOG.md

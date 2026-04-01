@@ -1,11 +1,13 @@
-out
-node_modules
+out/
+node_modules/
 .vscode-test/
 *.vsix
-.DS_Store
-coverage
-.test-extensions
-dist
-.tmp
+.DS_Store/
+coverage/
+.test-extensions/
+dist/
+.tmp/
 .eslintcache
 .prettiercache
+# temp text file used for git diff, remove it after use
+temp.txt
