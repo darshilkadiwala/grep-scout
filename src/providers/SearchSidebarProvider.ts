@@ -1,19 +1,24 @@
 import * as vscode from 'vscode';
 
+import { COMMANDS, EXTENSION_MESSAGES, VSCODE_CONFIG, WEBVIEW_MESSAGES, WEBVIEW_PATHS } from '../constants';
 import { SearchController } from '../controllers/SearchController';
 import { ExtensionMessage, WebviewMessage } from '../types';
 import { FileIconProvider } from '../utils/fileIconProvider';
 import { HistoryManager } from '../utils/historyManager';
 
 export class SearchSidebarProvider implements vscode.WebviewViewProvider {
-  public static readonly viewType = 'filescout.sidebar';
-
   private _view?: vscode.WebviewView;
 
   constructor(
     private readonly _extensionUri: vscode.Uri,
     private readonly historyManager: HistoryManager,
-  ) {}
+  ) {
+    vscode.workspace.onDidChangeConfiguration((e) => {
+      if (e.affectsConfiguration(VSCODE_CONFIG.SECTION)) {
+        this._sendSettings();
+      }
+    });
+  }
 
   public resolveWebviewView(webviewView: vscode.WebviewView) {
     this._view = webviewView;
@@ -36,12 +41,15 @@ export class SearchSidebarProvider implements vscode.WebviewViewProvider {
 
     webviewView.webview.onDidReceiveMessage(async (data: WebviewMessage) => {
       switch (data.type) {
-        case 'search': {
+        case WEBVIEW_MESSAGES.SEARCH: {
           if (data.payload.query) {
             this.historyManager.addToHistory(data.payload.query);
           }
           const results = await SearchController.search(data.payload);
-          this._view?.webview.postMessage({ type: 'results', payload: results } as ExtensionMessage);
+          this._view?.webview.postMessage({
+            type: EXTENSION_MESSAGES.RESULTS,
+            payload: results,
+          } as ExtensionMessage);
 
           // Resolve file/folder icons for the current results.
           // Extract all unique folder names in this result set.
@@ -57,56 +65,78 @@ export class SearchSidebarProvider implements vscode.WebviewViewProvider {
             results.map((r) => r.fileName),
             Array.from(folderNames),
           );
-          this._view?.webview.postMessage({ type: 'iconMap', payload: iconMap } as ExtensionMessage);
+          this._view?.webview.postMessage({
+            type: EXTENSION_MESSAGES.ICON_MAP,
+            payload: iconMap,
+          } as ExtensionMessage);
           break;
         }
-        case 'openFile': {
+        case WEBVIEW_MESSAGES.OPEN_FILE: {
           SearchController.openFile(data.payload);
           break;
         }
-        case 'getHistory': {
+        case WEBVIEW_MESSAGES.GET_HISTORY: {
           const history = this.historyManager.getHistory();
-          this._view?.webview.postMessage({ type: 'history', payload: history } as ExtensionMessage);
+          this._view?.webview.postMessage({
+            type: EXTENSION_MESSAGES.HISTORY,
+            payload: history,
+          } as ExtensionMessage);
           this._sendHasWorkspace();
           break;
         }
-        case 'refreshCache': {
+        case WEBVIEW_MESSAGES.REFRESH_CACHE: {
           await this.refresh();
           break;
         }
-        case 'openFolder': {
-          vscode.commands.executeCommand('workbench.action.addRootFolder');
+        case WEBVIEW_MESSAGES.OPEN_FOLDER: {
+          vscode.commands.executeCommand(COMMANDS.VSCODE_OPEN_ROOT_FOLDER);
           break;
         }
       }
     });
 
     vscode.workspace.onDidChangeWorkspaceFolders(() => this._sendHasWorkspace());
+
+    // Initial data sync
+    this._sendSettings();
   }
 
   /**
    * Manually trigger a cache refresh with webview progress indication
    */
   public async refresh() {
-    this._view?.webview.postMessage({ type: 'refreshingStart' } as ExtensionMessage);
-    await vscode.commands.executeCommand('filescout.refreshCacheInternal');
-    this._view?.webview.postMessage({ type: 'refreshingEnd' } as ExtensionMessage);
-    this._view?.webview.postMessage({ type: 'cacheRefreshed' } as ExtensionMessage);
+    this._view?.webview.postMessage({ type: EXTENSION_MESSAGES.REFRESHING_START } as ExtensionMessage);
+    await vscode.commands.executeCommand(COMMANDS.REFRESH_CACHE_INTERNAL);
+    this._view?.webview.postMessage({ type: EXTENSION_MESSAGES.REFRESHING_END } as ExtensionMessage);
+    this._view?.webview.postMessage({ type: EXTENSION_MESSAGES.CACHE_REFRESHED } as ExtensionMessage);
   }
 
   /** Flip the folder search toggle inside the webview (triggered via Title Bar command) */
   public toggleDirMode() {
-    this._view?.webview.postMessage({ type: 'toggleDirMode' } as ExtensionMessage);
+    this._view?.webview.postMessage({ type: EXTENSION_MESSAGES.TOGGLE_DIR_MODE } as ExtensionMessage);
+  }
+
+  private _sendSettings() {
+    const config = vscode.workspace.getConfiguration(VSCODE_CONFIG.SECTION);
+    const settings = {
+      maxResults: config.get(VSCODE_CONFIG.KEYS.MAX_RESULTS),
+      historyLimit: config.get(VSCODE_CONFIG.KEYS.HISTORY_LIMIT),
+      debounceDelay: config.get(VSCODE_CONFIG.KEYS.DEBOUNCE_DELAY),
+    };
+    this._view?.webview.postMessage({
+      type: EXTENSION_MESSAGES.SETTINGS,
+      payload: settings,
+    } as ExtensionMessage);
   }
 
   private _sendHasWorkspace() {
     const has = (vscode.workspace.workspaceFolders?.length ?? 0) > 0;
-    this._view?.webview.postMessage({ type: 'hasWorkspace', payload: has } as ExtensionMessage);
+    this._view?.webview.postMessage({ type: EXTENSION_MESSAGES.HAS_WORKSPACE, payload: has } as ExtensionMessage);
   }
 
   private _getHtmlForWebview(webview: vscode.Webview) {
-    const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'dist', 'webview', 'index.js'));
-    const styleUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'dist', 'webview', 'index.css'));
+    const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, WEBVIEW_PATHS.INDEX_JS));
+    const styleUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, WEBVIEW_PATHS.INDEX_CSS));
     // img-src is required so the webview can display icon theme SVG/PNG files.
     return `<!DOCTYPE html>
             <html lang="en">

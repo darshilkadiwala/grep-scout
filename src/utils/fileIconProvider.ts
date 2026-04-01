@@ -1,5 +1,7 @@
 import * as vscode from 'vscode';
 
+import { PACKAGE_JSON, VSCODE_CONFIG } from '../constants';
+
 // ── Shared type (also imported by the webview via types/index.ts) ────────────
 
 export interface IconMap {
@@ -150,7 +152,7 @@ export class FileIconProvider {
   // ── Private ────────────────────────────────────────────────────────────────
 
   private static async _loadTheme() {
-    const themeId = vscode.workspace.getConfiguration('workbench').get<string>('iconTheme');
+    const themeId = vscode.workspace.getConfiguration(VSCODE_CONFIG.WORKBENCH).get<string>(VSCODE_CONFIG.ICON_THEME);
 
     if (!themeId) return null;
 
@@ -160,7 +162,8 @@ export class FileIconProvider {
     }
 
     for (const ext of vscode.extensions.all) {
-      const themes: Array<{ id: string; path: string }> = ext.packageJSON?.contributes?.iconThemes ?? [];
+      const themes: Array<{ id: string; path: string }> =
+        ext.packageJSON?.[PACKAGE_JSON.CONTRIBUTES]?.[PACKAGE_JSON.ICON_THEMES] ?? [];
 
       for (const theme of themes) {
         if (theme.id !== themeId) continue;

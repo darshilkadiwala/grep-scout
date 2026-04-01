@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 
+import { GLOB_PATTERNS, SEARCH_CONFIG, VSCODE_CONFIG } from '../constants';
 import { SearchQuery, SearchResult } from '../types';
 import { FileCacheController } from './FileCacheController';
 
@@ -7,7 +8,7 @@ import { FileCacheController } from './FileCacheController';
 
 // Checks if a relative path matches a glob pattern like **/*.ts
 function isGlobMatch(relPath: string, glob: string): boolean {
-  if (!glob || glob === '*' || glob === '**/*') return true;
+  if (!glob || glob === '*' || glob === GLOB_PATTERNS.ALL_FILES) return true;
   // Naive glob-to-regex converter.
   const escaped = glob
     .replace(/[.+^${}()|[\]\\]/g, '\\$&')
@@ -61,7 +62,11 @@ function matchesSegment(
 // ─── Controller ───────────────────────────────────────────────────────────────
 
 export class SearchController {
-  public static async search(query: SearchQuery, maxResults: number = 500): Promise<SearchResult[]> {
+  public static async search(
+    query: SearchQuery,
+    maxResults: number = vscode.workspace.getConfiguration(VSCODE_CONFIG.SECTION).get(VSCODE_CONFIG.KEYS.MAX_RESULTS) ||
+      SEARCH_CONFIG.MAX_RESULTS,
+  ): Promise<SearchResult[]> {
     const { query: rawQuery, include, matchCase, matchWord, useRegex, searchOpenEditors, searchMode = 'file' } = query;
 
     if (!rawQuery && !include) {

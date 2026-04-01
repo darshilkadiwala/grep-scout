@@ -69,7 +69,7 @@
         {
           "id": "filescout.sidebar",
           "type": "webview",
-          "name": "Search",
+          "name": "Search Files",
           "icon": "media/search-icon.svg"
         }
       ]
@@ -107,6 +107,26 @@
           "group": "navigation"
         }
       ]
+    },
+    "configuration": {
+      "title": "FileScout",
+      "properties": {
+        "filescout.maxResults": {
+          "type": "number",
+          "default": 500,
+          "description": "Maximum search results to display in the sidebar."
+        },
+        "filescout.historyLimit": {
+          "type": "number",
+          "default": 50,
+          "description": "The number of past search queries to remember."
+        },
+        "filescout.debounceDelay": {
+          "type": "number",
+          "default": 150,
+          "description": "Delay in milliseconds before starting a search after typing stops."
+        }
+      }
     },
     "keybindings": [
       {

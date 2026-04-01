@@ -14,7 +14,8 @@
     "paths": {
       "@/*": ["./*"],
       "@shared": ["../types"],
-      "@shared/*": ["../types/*"]
+      "@shared/*": ["../types/*"],
+      "@constants": ["../constants"]
     }
   },
   "include": ["./**/*"],

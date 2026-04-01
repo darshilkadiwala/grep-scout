@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { ExtensionMessage, IconMap, SearchQuery, SearchResult } from '@shared';
+import { EXTENSION_MESSAGES, SEARCH_CONFIG, WEBVIEW_MESSAGES } from '@constants';
+import { ExtensionMessage, IconMap, SearchResult, Settings, WebviewMessage } from '@shared';
 
 import { vscode } from '@/utils/vscode';
 
@@ -31,6 +32,11 @@ export function useSearch() {
 
   const [loading, setLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [settings, setSettings] = useState<Settings>({
+    maxResults: SEARCH_CONFIG.MAX_RESULTS,
+    historyLimit: SEARCH_CONFIG.HISTORY_LIMIT,
+    debounceDelay: SEARCH_CONFIG.DEBOUNCE_DELAY,
+  });
 
   const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -71,7 +77,7 @@ export function useSearch() {
     (qText = query) => {
       setLoading(true);
       vscode.postMessage({
-        type: 'search',
+        type: WEBVIEW_MESSAGES.SEARCH,
         payload: {
           query: qText,
           include,
@@ -82,8 +88,8 @@ export function useSearch() {
           searchOpenEditors,
           useExcludeSettings,
           searchMode: searchDirMode ? 'dir' : 'file',
-        } as SearchQuery,
-      });
+        },
+      } as WebviewMessage);
     },
     [query, include, exclude, matchCase, matchWord, useRegex, searchOpenEditors, useExcludeSettings, searchDirMode],
   );
@@ -93,30 +99,33 @@ export function useSearch() {
     const handleMessage = (event: MessageEvent<ExtensionMessage>) => {
       const msg = event.data;
       switch (msg.type) {
-        case 'results':
+        case EXTENSION_MESSAGES.RESULTS:
           setResults(msg.payload);
           setLoading(false);
           break;
-        case 'iconMap':
+        case EXTENSION_MESSAGES.ICON_MAP:
           setIconMap(msg.payload);
           break;
-        case 'history':
+        case EXTENSION_MESSAGES.HISTORY:
           setHistory(msg.payload);
           break;
-        case 'hasWorkspace':
+        case EXTENSION_MESSAGES.HAS_WORKSPACE:
           setHasWorkspace(msg.payload);
           break;
-        case 'toggleDirMode':
+        case EXTENSION_MESSAGES.TOGGLE_DIR_MODE:
           setSearchDirMode((v) => !v);
           break;
-        case 'cacheRefreshed':
+        case EXTENSION_MESSAGES.CACHE_REFRESHED:
           performSearch();
           break;
-        case 'refreshingStart':
+        case EXTENSION_MESSAGES.REFRESHING_START:
           setIsRefreshing(true);
           break;
-        case 'refreshingEnd':
+        case EXTENSION_MESSAGES.REFRESHING_END:
           setIsRefreshing(false);
+          break;
+        case EXTENSION_MESSAGES.SETTINGS:
+          setSettings(msg.payload);
           break;
       }
     };
@@ -132,7 +141,7 @@ export function useSearch() {
       setLoading(false);
       return;
     }
-    searchTimeoutRef.current = setTimeout(() => performSearch(), 150);
+    searchTimeoutRef.current = setTimeout(() => performSearch(), settings.debounceDelay);
   }, [
     query,
     include,
@@ -144,14 +153,15 @@ export function useSearch() {
     useExcludeSettings,
     searchDirMode,
     performSearch,
+    settings.debounceDelay,
   ]);
 
   const openFile = useCallback((path: string) => {
-    vscode.postMessage({ type: 'openFile', payload: path });
+    vscode.postMessage({ type: WEBVIEW_MESSAGES.OPEN_FILE, payload: path });
   }, []);
 
   const openFolder = useCallback(() => {
-    vscode.postMessage({ type: 'openFolder' });
+    vscode.postMessage({ type: WEBVIEW_MESSAGES.OPEN_FOLDER });
   }, []);
 
   return {
@@ -174,6 +184,7 @@ export function useSearch() {
     searchDirMode,
     setSearchDirMode,
     results,
+    setResults,
     loading,
     isRefreshing,
     iconMap,

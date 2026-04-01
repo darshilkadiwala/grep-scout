@@ -12,6 +12,7 @@ export default defineConfig({
     alias: {
       '@': resolve(__dirname, '.'),
       '@shared': resolve(__dirname, '../types'),
+      '@constants': resolve(__dirname, '../constants'),
     },
   },
   build: {

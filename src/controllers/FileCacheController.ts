@@ -1,5 +1,8 @@
 import * as vscode from 'vscode';
 
+import { GLOB_PATTERNS, LOG_MESSAGES } from '../constants';
+import { outputChannel } from '../extension';
+
 export class FileCacheController {
   private static files: vscode.Uri[] = [];
   private static watcher: vscode.FileSystemWatcher | null = null;
@@ -13,12 +16,12 @@ export class FileCacheController {
   }
 
   public static async refresh() {
-    console.log('[FileCache] Refreshing cache...');
+    outputChannel.appendLine(LOG_MESSAGES.CACHE_REFRESHING);
     // We get ALL files initially.
     // Note: vscode.workspace.findFiles with '**/*' handles .gitignore if configured,
     // but here we just want a broad pool that we can filter later.
-    this.files = await vscode.workspace.findFiles('**/*', '**/node_modules/**');
-    console.log(`[FileCache] Cached ${this.files.length} files.`);
+    this.files = await vscode.workspace.findFiles(GLOB_PATTERNS.ALL_FILES, GLOB_PATTERNS.NODE_MODULES_EXCLUDE);
+    outputChannel.appendLine(LOG_MESSAGES.CACHE_COMPLETED(this.files.length));
   }
 
   private static setupWatcher() {
