@@ -1,8 +1,11 @@
 {
   "name": "filescout",
+  "extensionDependencies": [
+    "darshil-dev.grepscout"
+  ],
   "displayName": "FileScout: Advanced File Search",
   "description": "Lightning-fast file name search with granular directory filtering",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "publisher": "darshil-dev",
   "engines": {
     "vscode": "^1.85.0"
@@ -19,7 +22,6 @@
     "url": "https://github.com/darshilkadiwala/filescout/issues"
   },
   "license": "SEE LICENSE IN LICENSE.txt",
-  "icon": "media/logo.png",
   "galleryBanner": {
     "color": "#007ACC",
     "theme": "dark"
@@ -52,121 +54,15 @@
   "activationEvents": [
     "onStartupFinished"
   ],
-  "main": "./dist/extension.js",
-  "browser": "./dist/extension.browser.js",
-  "contributes": {
-    "viewsContainers": {
-      "activitybar": [
-        {
-          "id": "filescout-container",
-          "title": "FileScout",
-          "icon": "media/search-icon.svg"
-        }
-      ]
-    },
-    "views": {
-      "filescout-container": [
-        {
-          "id": "filescout.sidebar",
-          "type": "webview",
-          "name": "Search",
-          "icon": "media/search-icon.svg"
-        }
-      ]
-    },
-    "commands": [
-      {
-        "command": "filescout.open",
-        "title": "Open FileScout",
-        "category": "FileScout"
-      },
-      {
-        "command": "filescout.refreshCache",
-        "title": "Refresh Cache",
-        "category": "FileScout",
-        "icon": "$(sync)"
-      },
-      {
-        "command": "filescout.scmCollapseAll",
-        "title": "Collapse All",
-        "icon": "$(collapse-all)",
-        "category": "Source Control"
-      }
-    ],
-    "menus": {
-      "scm/title": [
-        {
-          "command": "filescout.scmCollapseAll",
-          "group": "navigation@10"
-        }
-      ],
-      "view/title": [
-        {
-          "command": "filescout.refreshCache",
-          "when": "view == filescout.sidebar",
-          "group": "navigation"
-        }
-      ]
-    },
-    "keybindings": [
-      {
-        "command": "filescout.open",
-        "key": "ctrl+alt+f",
-        "mac": "cmd+alt+f",
-        "when": "editorTextFocus"
-      }
-    ]
-  },
+  "main": "./extension.js",
+  "browser": "./extension.browser.js",
   "scripts": {
-    "vscode:prepublish": "pnpm run build",
-    "build": "pnpm run build:extension && pnpm run build:webview",
-    "build:extension": "node esbuild.js --production",
-    "build:webview": "cd src/webview && vite build",
-    "watch": "run-p watch:*",
-    "watch:extension": "node esbuild.js --watch",
-    "watch:webview": "cd src/webview && vite build --watch",
     "package": "vsce package --no-dependencies",
     "publish": "vsce publish --no-dependencies",
-    "release": "commit-and-tag-version",
-    "lint": "tsc --noEmit && eslint src --cache --fix --max-warnings=0",
-    "format": "prettier --write . --cache --ignore-unknown --list-different",
-    "postinstall": "pnpm run format"
+    "release": "commit-and-tag-version -m \"release(extension): v%s\""
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.4",
-    "@ianvs/prettier-plugin-sort-imports": "^4.7.0",
-    "@types/node": "^20.0.0",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
-    "@types/vscode": "^1.85.0",
-    "@typescript-eslint/eslint-plugin": "^8.32.1",
-    "@typescript-eslint/parser": "^8.32.1",
-    "@vitejs/plugin-react": "^4.2.0",
     "@vscode/vsce": "^2.22.0",
-    "commit-and-tag-version": "^12.7.1",
-    "esbuild": "^0.20.0",
-    "eslint": "^9.27.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^3.1.4",
-    "npm-run-all": "^4.1.5",
-    "prettier": "^3.7.4",
-    "prettier-plugin-tailwindcss": "^0.7.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "typescript": "^5.3.0",
-    "typescript-eslint": "^8.32.1",
-    "vite": "^5.0.0"
-  },
-  "dependencies": {
-    "@tailwindcss/vite": "^4.2.2",
-    "@vscode/codicons": "^0.0.45",
-    "clsx": "^2.1.1",
-    "tailwind-merge": "^3.4.0",
-    "tailwindcss": "^4.2.2"
-  },
-  "commit-and-tag-version": {
-    "scripts": {
-      "postchangelog": "pnpm run format"
-    }
+    "commit-and-tag-version": "^12.7.1"
   }
 }

@@ -2,13 +2,10 @@
 **/*
 
 # Include only the compiled outputs and artifacts
-!dist/**
+!extension.js
+!extension.browser.js
 !media/search-icon.svg
 !package.json
 !README.md
 !CHANGELOG.md
 !LICENSE.txt
-
-# Ensure parent directories are not ignored
-!dist/
-!media/
