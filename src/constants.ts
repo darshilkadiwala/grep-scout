@@ -3,12 +3,12 @@
  */
 export const VIEWS = {
   SIDEBAR: {
-    ID: 'filescout.sidebar',
+    ID: 'grepscout.sidebar',
     TITLE: 'Search Files',
   },
   CONTAINER: {
-    ID: 'filescout-container',
-    TITLE: 'FileScout',
+    ID: 'grepscout-container',
+    TITLE: 'GrepScout',
   },
 } as const;
 
@@ -17,13 +17,14 @@ export const VIEWS = {
  */
 export const COMMANDS = {
   // Extension commands
-  OPEN: 'filescout.open',
-  REFRESH_CACHE: 'filescout.refreshCache',
-  REFRESH_CACHE_INTERNAL: 'filescout.refreshCacheInternal',
-  SCM_COLLAPSE_ALL: 'filescout.scmCollapseAll',
+  OPEN: 'grepscout.open',
+  REFRESH_CACHE: 'grepscout.refreshCache',
+  REFRESH_CACHE_INTERNAL: 'grepscout.refreshCacheInternal',
+  SCM_COLLAPSE_ALL: 'grepscout.scmCollapseAll',
   SIDEBAR_FOCUS: `${VIEWS.SIDEBAR.ID}.focus`,
 
   // Built-in VS Code commands
+  VSCODE_OPEN: 'vscode.open',
   VSCODE_OPEN_ROOT_FOLDER: 'vscode.openFolder',
   VSCODE_VIEW_EXTENSION_CONTAINER: `workbench.view.extension.${VIEWS.CONTAINER.ID}`,
   VSCODE_LIST_COLLAPSE_ALL: 'list.collapseAll',
@@ -34,35 +35,35 @@ export const COMMANDS = {
  * Message types sent from the Webview TO the Extension
  */
 export const WEBVIEW_MESSAGES = {
-  SEARCH: 'filescout:webview:search',
-  OPEN_FILE: 'filescout:webview:openFile',
-  GET_HISTORY: 'filescout:webview:getHistory',
-  OPEN_FOLDER: 'filescout:webview:openFolder',
-  REFRESH_CACHE: 'filescout:webview:refreshCache',
-  SAVE_HISTORY: 'filescout:webview:saveHistory',
+  SEARCH: 'grepscout:webview:search',
+  OPEN_FILE: 'grepscout:webview:openFile',
+  GET_HISTORY: 'grepscout:webview:getHistory',
+  OPEN_FOLDER: 'grepscout:webview:openFolder',
+  REFRESH_CACHE: 'grepscout:webview:refreshCache',
+  SAVE_HISTORY: 'grepscout:webview:saveHistory',
 } as const;
 
 /**
  * Message types sent from the Extension TO the Webview
  */
 export const EXTENSION_MESSAGES = {
-  RESULTS: 'filescout:extension:results',
-  ICON_MAP: 'filescout:extension:iconMap',
-  HISTORY: 'filescout:extension:history',
-  ERROR: 'filescout:extension:error',
-  HAS_WORKSPACE: 'filescout:extension:hasWorkspace',
-  TOGGLE_DIR_MODE: 'filescout:extension:toggleDirMode',
-  CACHE_REFRESHED: 'filescout:extension:cacheRefreshed',
-  REFRESHING_START: 'filescout:extension:refreshingStart',
-  REFRESHING_END: 'filescout:extension:refreshingEnd',
-  SETTINGS: 'filescout:extension:settings',
+  RESULTS: 'grepscout:extension:results',
+  ICON_MAP: 'grepscout:extension:iconMap',
+  HISTORY: 'grepscout:extension:history',
+  ERROR: 'grepscout:extension:error',
+  HAS_WORKSPACE: 'grepscout:extension:hasWorkspace',
+  TOGGLE_DIR_MODE: 'grepscout:extension:toggleDirMode',
+  CACHE_REFRESHED: 'grepscout:extension:cacheRefreshed',
+  REFRESHING_START: 'grepscout:extension:refreshingStart',
+  REFRESHING_END: 'grepscout:extension:refreshingEnd',
+  SETTINGS: 'grepscout:extension:settings',
 } as const;
 
 /**
  * Storage / Memento Keys
  */
 export const STORAGE_KEYS = {
-  SEARCH_HISTORY: 'filescout.searchHistory',
+  SEARCH_HISTORY: 'grepscout.searchHistory',
 } as const;
 
 /**
@@ -71,6 +72,21 @@ export const STORAGE_KEYS = {
 export const GLOB_PATTERNS = {
   ALL_FILES: '**/*',
   NODE_MODULES_EXCLUDE: '**/node_modules/**',
+} as const;
+
+/**
+ * Internal URI Schema
+ */
+export const URI_SCHEMES = {
+  SEARCH_ROOT: 'grepscout-root:/',
+};
+
+/**
+ * UI Text Strings
+ */
+export const UI_TEXTS = {
+  SEARCH_RESULTS: 'Search Results',
+  OPEN_FILE: 'Open File',
 } as const;
 
 /**
@@ -88,7 +104,7 @@ export const WEBVIEW_PATHS = {
  * VS Code Configuration
  */
 export const VSCODE_CONFIG = {
-  SECTION: 'filescout',
+  SECTION: 'grepscout',
   WORKBENCH: 'workbench',
   ICON_THEME: 'iconTheme',
   KEYS: {
@@ -102,7 +118,7 @@ export const VSCODE_CONFIG = {
  * VS Code Context Keys
  */
 export const CONTEXT_KEYS = {
-  READY: 'filescout:isReady',
+  READY: 'grepscout:isReady',
 } as const;
 
 /**
