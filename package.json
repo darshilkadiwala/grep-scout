@@ -2,7 +2,7 @@
   "name": "grepscout",
   "displayName": "GrepScout: Advanced File Search",
   "description": "Lightning-fast file name search with granular directory filtering",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "publisher": "darshil-dev",
   "engines": {
     "vscode": "^1.85.0"
