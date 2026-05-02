@@ -1,5 +1,7 @@
 import * as vscode from 'vscode';
 
+import { COMMANDS, UI_TEXTS, URI_SCHEMES } from '../constants';
+
 // ---------------------------------------------------------------------------
 // TreeItem
 // ---------------------------------------------------------------------------
@@ -23,8 +25,8 @@ export class SearchResultItem extends vscode.TreeItem {
     if (!isFolder) {
       // Clicking a file opens it without stealing focus from the sidebar.
       this.command = {
-        command: 'vscode.open',
-        title: 'Open File',
+        command: COMMANDS.VSCODE_OPEN,
+        title: UI_TEXTS.OPEN_FILE,
         arguments: [uri],
       };
     }
@@ -155,7 +157,7 @@ export class SearchTreeProvider implements vscode.TreeDataProvider<SearchResultI
 
     // Sentinel root – its own uri is never exposed to VS Code.
     const root: TrieNode = {
-      uri: vscode.Uri.parse('filescout-root:/'),
+      uri: vscode.Uri.parse(URI_SCHEMES.SEARCH_ROOT),
       isFile: false,
       children: new Map(),
     };

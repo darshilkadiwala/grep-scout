@@ -1,6 +1,6 @@
 {
-  "name": "filescout",
-  "displayName": "FileScout: Advanced File Search",
+  "name": "grepscout",
+  "displayName": "GrepScout: Advanced File Search",
   "description": "Lightning-fast file name search with granular directory filtering",
   "version": "0.0.2",
   "publisher": "darshil-dev",
@@ -12,11 +12,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/darshilkadiwala/filescout.git"
+    "url": "https://github.com/darshilkadiwala/grep-scout.git"
   },
-  "homepage": "https://github.com/darshilkadiwala/filescout#readme",
+  "homepage": "https://github.com/darshilkadiwala/grep-scout#readme",
   "bugs": {
-    "url": "https://github.com/darshilkadiwala/filescout/issues"
+    "url": "https://github.com/darshilkadiwala/grep-scout/issues"
   },
   "license": "SEE LICENSE IN LICENSE.txt",
   "icon": "media/logo.png",
@@ -26,19 +26,37 @@
   },
   "keywords": [
     "search",
+    "grep",
     "file search",
+    "directory search",
+    "dir search",
+    "folder search",
     "advanced search",
     "explorer",
     "listing",
+    "file listing",
+    "directory listing",
+    "dir listing",
     "list files",
+    "list directory",
+    "list dir",
+    "list folder",
     "find files",
-    "developer tools"
+    "find directory",
+    "find dir",
+    "find folder",
+    "grep files",
+    "grep directory",
+    "grep dir",
+    "grep folder",
+    "developer tools",
+    "extension"
   ],
   "categories": [
     "Visualization",
     "Other"
   ],
-  "qna": "https://github.com/darshilkadiwala/filescout/issues",
+  "qna": "https://github.com/darshilkadiwala/grep-scout/issues",
   "extensionKind": [
     "workspace",
     "ui"
@@ -58,16 +76,16 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "filescout-container",
-          "title": "FileScout",
+          "id": "grepscout-container",
+          "title": "GrepScout",
           "icon": "media/search-icon.svg"
         }
       ]
     },
     "views": {
-      "filescout-container": [
+      "grepscout-container": [
         {
-          "id": "filescout.sidebar",
+          "id": "grepscout.sidebar",
           "type": "webview",
           "name": "Search Files",
           "icon": "media/search-icon.svg"
@@ -76,18 +94,18 @@
     },
     "commands": [
       {
-        "command": "filescout.open",
-        "title": "Open FileScout",
-        "category": "FileScout"
+        "command": "grepscout.open",
+        "title": "Open GrepScout",
+        "category": "GrepScout"
       },
       {
-        "command": "filescout.refreshCache",
+        "command": "grepscout.refreshCache",
         "title": "Refresh Cache",
-        "category": "FileScout",
+        "category": "GrepScout",
         "icon": "$(sync)"
       },
       {
-        "command": "filescout.scmCollapseAll",
+        "command": "grepscout.scmCollapseAll",
         "title": "Collapse All",
         "icon": "$(collapse-all)",
         "category": "Source Control"
@@ -96,32 +114,32 @@
     "menus": {
       "scm/title": [
         {
-          "command": "filescout.scmCollapseAll",
+          "command": "grepscout.scmCollapseAll",
           "group": "navigation@10"
         }
       ],
       "view/title": [
         {
-          "command": "filescout.refreshCache",
-          "when": "view == filescout.sidebar",
+          "command": "grepscout.refreshCache",
+          "when": "view == grepscout.sidebar",
           "group": "navigation"
         }
       ]
     },
     "configuration": {
-      "title": "FileScout",
+      "title": "GrepScout",
       "properties": {
-        "filescout.maxResults": {
+        "grepscout.maxResults": {
           "type": "number",
           "default": 500,
           "description": "Maximum search results to display in the sidebar."
         },
-        "filescout.historyLimit": {
+        "grepscout.historyLimit": {
           "type": "number",
           "default": 50,
           "description": "The number of past search queries to remember."
         },
-        "filescout.debounceDelay": {
+        "grepscout.debounceDelay": {
           "type": "number",
           "default": 150,
           "description": "Delay in milliseconds before starting a search after typing stops."
@@ -130,7 +148,7 @@
     },
     "keybindings": [
       {
-        "command": "filescout.open",
+        "command": "grepscout.open",
         "key": "ctrl+alt+f",
         "mac": "cmd+alt+f",
         "when": "editorTextFocus"
@@ -151,7 +169,7 @@
     "lint": "tsc --noEmit && eslint src --cache --fix --max-warnings=0",
     "format": "prettier --write . --cache --ignore-unknown --list-different",
     "postinstall": "pnpm run format",
-    "diff": "git diff --staged > temp.txt"
+    "diff": "git diff --cached > temp.txt"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",

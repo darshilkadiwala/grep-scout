@@ -2,5 +2,5 @@
   "files.associations": {
     "*.css": "tailwindcss"
   },
-  "cSpell.words": ["eslintcache", "filescout", "ianvs", "prettiercache"]
+  "cSpell.words": ["eslintcache", "grepscout", "ianvs", "prettiercache"]
 }

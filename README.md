@@ -1,7 +1,7 @@
-# FileScout: Advanced File Search
+# GrepScout: Advanced File Search
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/darshilkadiwala/filescout/main/media/logo.png" alt="FileScout Logo" width="128" />
+  <img src="https://raw.githubusercontent.com/darshilkadiwala/grep-scout/main/media/logo.png" alt="GrepScout Logo" width="128" />
 </p>
 
 <p align="center">
@@ -9,19 +9,19 @@
 </p>
 
 <p align="center">
-  <a href="https://marketplace.visualstudio.com/items?itemName=darshil-dev.filescout"><img src="https://img.shields.io/visual-studio-marketplace/v/darshil-dev.filescout?style=flat-square&logo=visual-studio-code" alt="Visual Studio Marketplace Version" /></a>
-  <a href="https://marketplace.visualstudio.com/items?itemName=darshil-dev.filescout"><img src="https://img.shields.io/visual-studio-marketplace/i/darshil-dev.filescout?style=flat-square" alt="Installs" /></a>
-  <a href="https://marketplace.visualstudio.com/items?itemName=darshil-dev.filescout"><img src="https://img.shields.io/visual-studio-marketplace/r/darshil-dev.filescout?style=flat-square" alt="Rating" /></a>
-  <a href="LICENSE.txt"><img src="https://img.shields.io/github/license/darshilkadiwala/filescout?style=flat-square" alt="License" /></a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=darshil-dev.grepscout"><img src="https://img.shields.io/visual-studio-marketplace/v/darshil-dev.grepscout?style=flat-square&logo=visual-studio-code" alt="Visual Studio Marketplace Version" /></a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=darshil-dev.grepscout"><img src="https://img.shields.io/visual-studio-marketplace/i/darshil-dev.grepscout?style=flat-square" alt="Installs" /></a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=darshil-dev.grepscout"><img src="https://img.shields.io/visual-studio-marketplace/r/darshil-dev.grepscout?style=flat-square" alt="Rating" /></a>
+  <a href="LICENSE.txt"><img src="https://img.shields.io/github/license/darshilkadiwala/grep-scout?style=flat-square" alt="License" /></a>
 </p>
 
 ---
 
-## 🚀 Why FileScout?
+## 🚀 Why GrepScout?
 
 Ever felt **Quick Open** (`Ctrl+P`) is too fuzzy and gives you too many irrelevant results? Or that **Full-Text Search** (`Ctrl+Shift+F`) is too heavy when you just want to find a file by its name?
 
-**FileScout** is designed to bridge this gap. It provides a dedicated, highly granular file-name search tool built directly into your Activity Bar. It's for power users who need exact control over where they are looking without the overhead of content searching.
+**GrepScout** is designed to bridge this gap. It provides a dedicated, highly granular file-name search tool built directly into your Activity Bar. It's for power users who need exact control over where they are looking without the overhead of content searching.
 
 ## ✨ Key Features
 
@@ -34,7 +34,7 @@ Ever felt **Quick Open** (`Ctrl+P`) is too fuzzy and gives you too many irreleva
 
 ## 🛠️ How to Use
 
-1. **Activate:** Open the FileScout view from the Activity Bar (look for the search icon) or use the shortcut `Ctrl + Alt + F` (Mac: `Cmd + Alt + F`).
+1. **Activate:** Open the GrepScout view from the Activity Bar (look for the search icon) or use the shortcut `Ctrl + Alt + F` (Mac: `Cmd + Alt + F`).
 2. **Search:** Enter your file name or pattern in the top search box.
 3. **Refine:** Toggle the `...` menu to specify directories to include or exclude.
 4. **Browse:** Explore the result tree and click any file to open it in the editor.
@@ -47,7 +47,7 @@ This extension currently uses default search exclusion rules. Additional configu
 
 | Shortcut     | Action                     |
 | ------------ | -------------------------- |
-| `Ctrl+Alt+F` | Open the FileScout Sidebar |
+| `Ctrl+Alt+F` | Open the GrepScout Sidebar |
 | `Up Arrow`   | Previous search query      |
 | `Down Arrow` | Next search query          |
 
@@ -55,9 +55,9 @@ This extension currently uses default search exclusion rules. Additional configu
 
 This extension provides the following commands via the Command Palette (`Ctrl+Shift+P`):
 
-- `FileScout: Open FileScout` – Shows the search sidebar.
-- `FileScout: Refresh Cache` – Manually triggers a re-index of the workspace.
-- `FileScout: Collapse All` – Collapses all folders in the search results tree.
+- `GrepScout: Open GrepScout` – Shows the search sidebar.
+- `GrepScout: Refresh Cache` – Manually triggers a re-index of the workspace.
+- `GrepScout: Collapse All` – Collapses all folders in the search results tree.
 
 ## 📋 Requirements
 
@@ -69,4 +69,4 @@ This extension provides the following commands via the Command Palette (`Ctrl+Sh
 
 ---
 
-**[GitHub Repository](https://github.com/darshilkadiwala/filescout) | [Report a Bug](https://github.com/darshilkadiwala/filescout/issues)**
+**[GitHub Repository](https://github.com/darshilkadiwala/grep-scout) | [Report a Bug](https://github.com/darshilkadiwala/grep-scout/issues)**
