@@ -13,3 +13,6 @@
 # Ensure parent directories are not ignored
 !dist/
 !media/
+
+# Exclude source maps
+dist/**/*.map
