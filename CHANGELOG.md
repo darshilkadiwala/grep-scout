@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.1.0](https://github.com/darshilkadiwala/grep-scout/compare/v1.0.0...v1.1.0) (2026-08-18)
+
+### Features
+
+- add Git status badges, clean path formatting, and single/double-click preview modes ([#2](https://github.com/darshilkadiwala/grep-scout/issues/2)) ([cfab439](https://github.com/darshilkadiwala/grep-scout/commit/cfab439dd60017dfc74c496762446cb06dbf7f9d))
+- **editor:** open files in preview mode on single click and regular mode on double click ([498f9e4](https://github.com/darshilkadiwala/grep-scout/commit/498f9e43840055ec53b542d26d112f310c4493e2))
+- **search:** add Git status indicators and clean path formatting to search results ([1929daf](https://github.com/darshilkadiwala/grep-scout/commit/1929dafdabe3033d9f9fdc26b5b1040303d466e8))
+
 ## [1.0.0](https://github.com/darshilkadiwala/grep-scout/compare/v0.0.2...v1.0.0) (2026-05-02)
 
 ### Features
