@@ -29,6 +29,9 @@ export const COMMANDS = {
   VSCODE_VIEW_EXTENSION_CONTAINER: `workbench.view.extension.${VIEWS.CONTAINER.ID}`,
   VSCODE_LIST_COLLAPSE_ALL: 'list.collapseAll',
   VSCODE_SET_CONTEXT: 'setContext',
+
+  // Built-in VS Code Extensions
+  VSCODE_GIT_EXTENSION: 'vscode.git',
 } as const;
 
 /**

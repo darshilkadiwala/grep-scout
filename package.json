@@ -7,6 +7,9 @@
   "engines": {
     "vscode": "^1.85.0"
   },
+  "extensionDependencies": [
+    "vscode.git"
+  ],
   "author": {
     "name": "Darshil Kadiwala"
   },

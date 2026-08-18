@@ -17,6 +17,8 @@ export interface SearchResult {
   fileName: string;
   relativePath: string;
   fullPath: string;
+  displayPath: string;
+  gitStatus?: string;
 }
 
 /**
