@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+
 import { COMMANDS } from '../constants';
 
 interface GitExtension {
@@ -95,26 +96,46 @@ export class GitStatusProvider {
 
     // Fallback to 0-indexed Status enum values
     switch (status) {
-      case 0: return 'INDEX_MODIFIED';
-      case 1: return 'INDEX_ADDED';
-      case 2: return 'INDEX_DELETED';
-      case 3: return 'INDEX_RENAMED';
-      case 4: return 'INDEX_COPIED';
-      case 5: return 'MODIFIED';
-      case 6: return 'DELETED';
-      case 7: return 'UNTRACKED';
-      case 8: return 'IGNORED';
-      case 9: return 'INTENT_TO_ADD';
-      case 10: return 'INTENT_TO_RENAME';
-      case 11: return 'TYPE_CHANGED';
-      case 12: return 'ADDED_BY_US';
-      case 13: return 'ADDED_BY_THEM';
-      case 14: return 'DELETED_BY_US';
-      case 15: return 'DELETED_BY_THEM';
-      case 16: return 'BOTH_ADDED';
-      case 17: return 'BOTH_DELETED';
-      case 18: return 'BOTH_MODIFIED';
-      default: return 'UNKNOWN';
+      case 0:
+        return 'INDEX_MODIFIED';
+      case 1:
+        return 'INDEX_ADDED';
+      case 2:
+        return 'INDEX_DELETED';
+      case 3:
+        return 'INDEX_RENAMED';
+      case 4:
+        return 'INDEX_COPIED';
+      case 5:
+        return 'MODIFIED';
+      case 6:
+        return 'DELETED';
+      case 7:
+        return 'UNTRACKED';
+      case 8:
+        return 'IGNORED';
+      case 9:
+        return 'INTENT_TO_ADD';
+      case 10:
+        return 'INTENT_TO_RENAME';
+      case 11:
+        return 'TYPE_CHANGED';
+      case 12:
+        return 'ADDED_BY_US';
+      case 13:
+        return 'ADDED_BY_THEM';
+      case 14:
+        return 'DELETED_BY_US';
+      case 15:
+        return 'DELETED_BY_THEM';
+      case 16:
+        return 'BOTH_ADDED';
+      case 17:
+        return 'BOTH_DELETED';
+      case 18:
+        return 'BOTH_MODIFIED';
+      default:
+        return 'UNKNOWN';
     }
   }
 

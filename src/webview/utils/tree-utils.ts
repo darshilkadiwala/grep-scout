@@ -39,7 +39,8 @@ export function buildTree(results: SearchResult[]): TreeNode[] {
           const fsParts = r.fullPath.replace(/\\/g, '/').split('/');
           folderPath = trailingSegs > 0 ? fsParts.slice(0, -trailingSegs).join('/') : fsParts.join('/');
           const displayParts = r.displayPath.replace(/\\/g, '/').split('/');
-          folderDisplayPath = trailingSegs > 0 ? displayParts.slice(0, -trailingSegs).join('/') : displayParts.join('/');
+          folderDisplayPath =
+            trailingSegs > 0 ? displayParts.slice(0, -trailingSegs).join('/') : displayParts.join('/');
         }
         cur.children.set(seg, { children: new Map(), folderPath, folderDisplayPath });
       }
