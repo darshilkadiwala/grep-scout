@@ -5,6 +5,7 @@ export interface TreeNode {
   result?: SearchResult;
   name?: string;
   fullPath?: string;
+  displayPath?: string;
   children?: TreeNode[];
 }
 
@@ -12,6 +13,7 @@ interface TrieNode {
   children: Map<string, TrieNode>;
   file?: SearchResult;
   folderPath: string;
+  folderDisplayPath: string;
 }
 
 /**
@@ -19,7 +21,7 @@ interface TrieNode {
  * Implements "compact folders" logic within the webview.
  */
 export function buildTree(results: SearchResult[]): TreeNode[] {
-  const root: TrieNode = { children: new Map(), folderPath: '' };
+  const root: TrieNode = { children: new Map(), folderPath: '', folderDisplayPath: '' };
 
   for (const r of results) {
     const segments = r.relativePath.replace(/\\/g, '/').split('/').filter(Boolean);
@@ -31,12 +33,16 @@ export function buildTree(results: SearchResult[]): TreeNode[] {
 
       if (!cur.children.has(seg)) {
         let folderPath = '';
+        let folderDisplayPath = '';
         if (!isLastSeg) {
           const trailingSegs = segments.length - i - 1;
           const fsParts = r.fullPath.replace(/\\/g, '/').split('/');
           folderPath = trailingSegs > 0 ? fsParts.slice(0, -trailingSegs).join('/') : fsParts.join('/');
+          const displayParts = r.displayPath.replace(/\\/g, '/').split('/');
+          folderDisplayPath =
+            trailingSegs > 0 ? displayParts.slice(0, -trailingSegs).join('/') : displayParts.join('/');
         }
-        cur.children.set(seg, { children: new Map(), folderPath });
+        cur.children.set(seg, { children: new Map(), folderPath, folderDisplayPath });
       }
 
       cur = cur.children.get(seg)!;
@@ -67,6 +73,7 @@ export function buildTree(results: SearchResult[]): TreeNode[] {
           kind: 'folder',
           name: label,
           fullPath: cur.folderPath || child.folderPath,
+          displayPath: cur.folderDisplayPath || child.folderDisplayPath,
           children: trieToNodes(cur),
         });
       }

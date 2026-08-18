@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 
 import { GLOB_PATTERNS, SEARCH_CONFIG, VSCODE_CONFIG } from '../constants';
 import { SearchQuery, SearchResult } from '../types';
+import { GitStatusProvider } from '../utils/GitStatusProvider';
 import { FileCacheController } from './FileCacheController';
 
 // ─── Utils ────────────────────────────────────────────────────────────────────
@@ -81,6 +82,8 @@ export class SearchController {
       ? new Set(vscode.workspace.textDocuments.map((doc) => doc.uri.toString()))
       : null;
 
+    const statusMap = await GitStatusProvider.getStatusMap();
+
     const filteredPool = allCacheFiles.filter((file) => {
       if (openUris && !openUris.has(file.toString())) return false;
       return true;
@@ -118,6 +121,8 @@ export class SearchController {
         fileName: getBasename(f.path),
         relativePath: vscode.workspace.asRelativePath(f),
         fullPath: f.toString(),
+        displayPath: f.fsPath || f.path,
+        gitStatus: GitStatusProvider.getConciseStatus(statusMap.get(f.fsPath || f.path) || ''),
       }));
     }
 
@@ -139,12 +144,14 @@ export class SearchController {
       fileName: getBasename(file.path),
       relativePath: vscode.workspace.asRelativePath(file),
       fullPath: file.toString(),
+      displayPath: file.fsPath || file.path,
+      gitStatus: GitStatusProvider.getConciseStatus(statusMap.get(file.fsPath || file.path) || ''),
     }));
   }
 
-  public static async openFile(fullPath: string) {
+  public static async openFile(fullPath: string, options?: { preview?: boolean }) {
     const uri = vscode.Uri.parse(fullPath);
     const document = await vscode.workspace.openTextDocument(uri);
-    await vscode.window.showTextDocument(document, { preserveFocus: true });
+    await vscode.window.showTextDocument(document, { preview: options?.preview ?? true });
   }
 }

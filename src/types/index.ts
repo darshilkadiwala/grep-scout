@@ -17,6 +17,8 @@ export interface SearchResult {
   fileName: string;
   relativePath: string;
   fullPath: string;
+  displayPath: string;
+  gitStatus?: string;
 }
 
 /**
@@ -38,10 +40,15 @@ export interface IconMap {
   folderOpen: string;
 }
 
+export interface OpenFilePayload {
+  path: string;
+  preview?: boolean;
+}
+
 /** Webview → Extension message type payloads */
 type WebviewPayloads = {
   [WEBVIEW_MESSAGES.SEARCH]: SearchQuery;
-  [WEBVIEW_MESSAGES.OPEN_FILE]: string;
+  [WEBVIEW_MESSAGES.OPEN_FILE]: OpenFilePayload;
   [WEBVIEW_MESSAGES.SAVE_HISTORY]: string[];
 };
 

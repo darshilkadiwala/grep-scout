@@ -156,8 +156,8 @@ export function useSearch() {
     settings.debounceDelay,
   ]);
 
-  const openFile = useCallback((path: string) => {
-    vscode.postMessage({ type: WEBVIEW_MESSAGES.OPEN_FILE, payload: path });
+  const openFile = useCallback((path: string, preview: boolean = true) => {
+    vscode.postMessage({ type: WEBVIEW_MESSAGES.OPEN_FILE, payload: { path, preview } });
   }, []);
 
   const openFolder = useCallback(() => {
