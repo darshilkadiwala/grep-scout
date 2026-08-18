@@ -72,7 +72,7 @@ export class SearchSidebarProvider implements vscode.WebviewViewProvider {
           break;
         }
         case WEBVIEW_MESSAGES.OPEN_FILE: {
-          SearchController.openFile(data.payload);
+          SearchController.openFile(data.payload.path, { preview: data.payload.preview ?? true });
           break;
         }
         case WEBVIEW_MESSAGES.GET_HISTORY: {

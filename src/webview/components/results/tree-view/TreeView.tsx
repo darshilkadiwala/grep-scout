@@ -9,7 +9,7 @@ interface TreeViewProps {
   expanded: Set<string>;
   iconMap: IconMap | null;
   onToggle: (path: string, recursive: boolean) => void;
-  onOpen: (path: string) => void;
+  onOpen: (path: string, preview?: boolean) => void;
 }
 
 export const TreeView: React.FC<TreeViewProps> = ({ nodes, expanded, iconMap, onToggle, onOpen }) => {

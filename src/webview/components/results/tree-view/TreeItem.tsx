@@ -14,7 +14,7 @@ interface TreeItemProps {
   expanded: Set<string>;
   iconMap: IconMap | null;
   onToggle: (path: string, recursive: boolean) => void;
-  onOpen: (path: string) => void;
+  onOpen: (path: string, preview?: boolean) => void;
 }
 
 export const TreeItem: React.FC<TreeItemProps> = ({ node, depth, expanded, iconMap, onToggle, onOpen }) => {
@@ -44,7 +44,8 @@ export const TreeItem: React.FC<TreeItemProps> = ({ node, depth, expanded, iconM
           'relative flex cursor-pointer items-center gap-1.5 py-0.5 select-none hover:bg-(--vscode-list-hoverBackground) active:bg-(--vscode-list-activeSelectionBackground) active:text-(--vscode-list-activeSelectionForeground)',
         )}
         style={{ paddingLeft: `${8 + depth * indentStep}px` }}
-        onClick={() => onOpen(node.result!.fullPath)}
+        onClick={() => onOpen(node.result!.fullPath, true)}
+        onDoubleClick={() => onOpen(node.result!.fullPath, false)}
         title={tooltipText}>
         {renderGuides()}
         {/* Spacer to align with chevron width */}
