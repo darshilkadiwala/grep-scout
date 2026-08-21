@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.2.0](https://github.com/darshilkadiwala/grep-scout/compare/v1.1.0...v1.2.0) (2026-08-21)
+
+### Features
+
+- add webview state versioning, migration, and payload validation ([#3](https://github.com/darshilkadiwala/grep-scout/issues/3)) ([ee85923](https://github.com/darshilkadiwala/grep-scout/commit/ee859231b47c56cd1a30fca44fd4032bbcb910cc))
+
+### Bug Fixes
+
+- **webview:** add state versioning and message payload validation ([921c496](https://github.com/darshilkadiwala/grep-scout/commit/921c49643f278deff36b93f1c87f74c6d16d5d65))
+
 ## [1.1.0](https://github.com/darshilkadiwala/grep-scout/compare/v1.0.0...v1.1.0) (2026-08-18)
 
 ### Features
