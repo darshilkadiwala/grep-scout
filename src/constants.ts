@@ -35,7 +35,14 @@ export const COMMANDS = {
 } as const;
 
 /**
- * Message types sent from the Webview TO the Extension
+ * VS Code Context Keys
+ */
+export const CONTEXT_KEYS = {
+  READY: 'grepscout:isReady',
+} as const;
+
+/**
+ * Webview Message Types
  */
 export const WEBVIEW_MESSAGES = {
   SEARCH: 'grepscout:webview:search',
@@ -63,34 +70,11 @@ export const EXTENSION_MESSAGES = {
 } as const;
 
 /**
- * Storage / Memento Keys
+ * Webview State Version
+ * Used to determine if the webview state is compatible with the current extension version.
+ * If the state version is different, the webview will be reloaded and the state will be reset.
  */
-export const STORAGE_KEYS = {
-  SEARCH_HISTORY: 'grepscout.searchHistory',
-} as const;
-
-/**
- * Glob Patterns
- */
-export const GLOB_PATTERNS = {
-  ALL_FILES: '**/*',
-  NODE_MODULES_EXCLUDE: '**/node_modules/**',
-} as const;
-
-/**
- * Internal URI Schema
- */
-export const URI_SCHEMES = {
-  SEARCH_ROOT: 'grepscout-root:/',
-};
-
-/**
- * UI Text Strings
- */
-export const UI_TEXTS = {
-  SEARCH_RESULTS: 'Search Results',
-  OPEN_FILE: 'Open File',
-} as const;
+export const WEBVIEW_STATE_VERSION = 2 as const;
 
 /**
  * Asset Paths (relative to extension root)
@@ -118,10 +102,10 @@ export const VSCODE_CONFIG = {
 } as const;
 
 /**
- * VS Code Context Keys
+ * Storage / Memento Keys
  */
-export const CONTEXT_KEYS = {
-  READY: 'grepscout:isReady',
+export const STORAGE_KEYS = {
+  SEARCH_HISTORY: 'grepscout.searchHistory',
 } as const;
 
 /**
@@ -139,6 +123,29 @@ export const SEARCH_CONFIG = {
   MAX_RESULTS: 500,
   HISTORY_LIMIT: 50,
   DEBOUNCE_DELAY: 150,
+} as const;
+
+/**
+ * Glob Patterns
+ */
+export const GLOB_PATTERNS = {
+  ALL_FILES: '**/*',
+  NODE_MODULES_EXCLUDE: '**/node_modules/**',
+} as const;
+
+/**
+ * Internal URI Schema
+ */
+export const URI_SCHEMES = {
+  SEARCH_ROOT: 'grepscout-root:/',
+};
+
+/**
+ * UI Text Strings
+ */
+export const UI_TEXTS = {
+  SEARCH_RESULTS: 'Search Results',
+  OPEN_FILE: 'Open File',
 } as const;
 
 /**
