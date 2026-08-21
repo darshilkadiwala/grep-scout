@@ -1,15 +1,24 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { EXTENSION_MESSAGES, SEARCH_CONFIG, WEBVIEW_MESSAGES } from '@constants';
+import { EXTENSION_MESSAGES, SEARCH_CONFIG, WEBVIEW_MESSAGES, WEBVIEW_STATE_VERSION } from '@constants';
 import { ExtensionMessage, IconMap, SearchResult, Settings, WebviewMessage } from '@shared';
 
+import {
+  migrateState,
+  normalizeResults,
+  parseHasWorkspace,
+  parseHistory,
+  parseIconMap,
+  parseSettings,
+} from '@/utils/state-migration';
 import { vscode } from '@/utils/vscode';
 
 /**
  * Orchestrates search input state, debounced updates, and cross-webview communication.
  */
 export function useSearch() {
-  const initialState = useMemo(() => vscode.getState() || {}, []);
+  const initialState = useMemo(() => migrateState(vscode.getState()), []);
+  const initialResults = normalizeResults(initialState.results);
 
   // UI state
   const [query, setQuery] = useState(initialState.query || '');
@@ -23,7 +32,7 @@ export function useSearch() {
   const [searchDirMode, setSearchDirMode] = useState(initialState.searchDirMode || false);
 
   // Result state
-  const [results, setResults] = useState<SearchResult[]>(initialState.results || []);
+  const [results, setResults] = useState<SearchResult[]>(initialResults);
   const [iconMap, setIconMap] = useState<IconMap | null>(initialState.iconMap || null);
   const [history, setHistory] = useState<string[]>([]);
   const [hasWorkspace, setHasWorkspace] = useState(true);
@@ -43,6 +52,7 @@ export function useSearch() {
   // Persist to vscode state on change
   useEffect(() => {
     vscode.setState({
+      __stateVersion: WEBVIEW_STATE_VERSION,
       query,
       include,
       exclude,
@@ -100,18 +110,27 @@ export function useSearch() {
       const msg = event.data;
       switch (msg.type) {
         case EXTENSION_MESSAGES.RESULTS:
-          setResults(msg.payload);
+          setResults(normalizeResults(msg.payload));
           setLoading(false);
           break;
-        case EXTENSION_MESSAGES.ICON_MAP:
-          setIconMap(msg.payload);
+        case EXTENSION_MESSAGES.ICON_MAP: {
+          const iconMapPayload = parseIconMap(msg.payload);
+          if (iconMapPayload !== null) setIconMap(iconMapPayload);
+
           break;
-        case EXTENSION_MESSAGES.HISTORY:
-          setHistory(msg.payload);
+        }
+        case EXTENSION_MESSAGES.HISTORY: {
+          const historyPayload = parseHistory(msg.payload);
+          if (historyPayload) setHistory(historyPayload);
+
           break;
-        case EXTENSION_MESSAGES.HAS_WORKSPACE:
-          setHasWorkspace(msg.payload);
+        }
+        case EXTENSION_MESSAGES.HAS_WORKSPACE: {
+          const hasWorkspacePayload = parseHasWorkspace(msg.payload);
+          if (hasWorkspacePayload !== null) setHasWorkspace(hasWorkspacePayload);
+
           break;
+        }
         case EXTENSION_MESSAGES.TOGGLE_DIR_MODE:
           setSearchDirMode((v) => !v);
           break;
@@ -124,9 +143,11 @@ export function useSearch() {
         case EXTENSION_MESSAGES.REFRESHING_END:
           setIsRefreshing(false);
           break;
-        case EXTENSION_MESSAGES.SETTINGS:
-          setSettings(msg.payload);
+        case EXTENSION_MESSAGES.SETTINGS: {
+          const settingsPayload = parseSettings(msg.payload);
+          if (settingsPayload) setSettings(settingsPayload);
           break;
+        }
       }
     };
     window.addEventListener('message', handleMessage);

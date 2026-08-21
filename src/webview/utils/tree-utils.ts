@@ -38,7 +38,7 @@ export function buildTree(results: SearchResult[]): TreeNode[] {
           const trailingSegs = segments.length - i - 1;
           const fsParts = r.fullPath.replace(/\\/g, '/').split('/');
           folderPath = trailingSegs > 0 ? fsParts.slice(0, -trailingSegs).join('/') : fsParts.join('/');
-          const displayParts = r.displayPath.replace(/\\/g, '/').split('/');
+          const displayParts = (r.displayPath || r.fullPath).replace(/\\/g, '/').split('/');
           folderDisplayPath =
             trailingSegs > 0 ? displayParts.slice(0, -trailingSegs).join('/') : displayParts.join('/');
         }

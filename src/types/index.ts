@@ -17,7 +17,7 @@ export interface SearchResult {
   fileName: string;
   relativePath: string;
   fullPath: string;
-  displayPath: string;
+  displayPath?: string;
   gitStatus?: string;
 }
 
@@ -83,6 +83,7 @@ export type WebviewMessage = MessageUnion<typeof WEBVIEW_MESSAGES, WebviewPayloa
 export type ExtensionMessage = MessageUnion<typeof EXTENSION_MESSAGES, ExtensionPayloads>;
 
 export interface AppState {
+  __stateVersion?: number;
   query?: string;
   include?: string;
   exclude?: string;
